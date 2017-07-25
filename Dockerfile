@@ -54,7 +54,7 @@ RUN ruby /root/phantomjs.rb
 
 # Set env.
 ENV AHA_REDIS_URL redis://localhost:6379/0
-ENV JEST_SUITE_NAME Tests
+ENV JEST_SUITE_NAME Aha! Tests
 ENV JEST_JUNIT_OUTPUT "/tmp/jest/junit.xml"
 ENV RAILS_ENV test
 
