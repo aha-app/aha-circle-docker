@@ -1,0 +1,2 @@
+require 'phantomjs'
+Phantomjs.path
