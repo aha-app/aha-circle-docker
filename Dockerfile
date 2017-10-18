@@ -61,20 +61,6 @@ RUN chown -Rf circleci /usr/local/pgsql/log
 RUN chown -Rf circleci /var/run/postgresql
 RUN sudo -u circleci /usr/lib/postgresql/9.5/bin/initdb -D /usr/local/pgsql/data
 
-# Install bundler.
-ENV BUNDLER_VERSION 1.15.1
-RUN gem install bundler --version "$BUNDLER_VERSION"
-
-# Install gems globally.
-ENV GEM_HOME /usr/local/bundle
-ENV BUNDLE_PATH="$GEM_HOME"
-ENV BUNDLE_BIN="$GEM_HOME/bin"
-ENV BUNDLE_SILENCE_ROOT_WARNING=1
-ENV BUNDLE_APP_CONFIG="$GEM_HOME"
-ENV PATH $BUNDLE_BIN:$PATH
-RUN mkdir -p "$GEM_HOME" "$BUNDLE_BIN"
-RUN chmod 777 "$GEM_HOME" "$BUNDLE_BIN"
-
 # Install patched phantomjs.
 RUN gem install specific_install
 RUN gem specific_install https://github.com/aha-app/phantomjs-gem.git
