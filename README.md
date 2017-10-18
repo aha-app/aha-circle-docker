@@ -6,6 +6,12 @@ Public Docker configuration for test environment.
 
 Run `docker build .`
 
+## Run/enter local image
+
+1. Run `docker build .`
+2. Run `docker run -i -t IMAGEID /bin/bash`, replacing `IMAGEID` with the ID output at the end of the docker build.
+3. You're now inside a bash shell in your container.
+
 ## Pushing updated image
 
 1. Run `docker build .`

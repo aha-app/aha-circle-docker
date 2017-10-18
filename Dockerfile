@@ -1,36 +1,65 @@
-FROM ruby:2.3-alpine
+FROM ruby:2.3
 
 WORKDIR /
 
-# Install node/npm.
-RUN apk --update --no-cache add "nodejs<7"
+# Install basic utilities for package installation and setup.
+RUN apt-get update
+RUN apt-get install sudo apt-transport-https -y
 
-# Install sudo.
-RUN apk --no-cache add sudo
-
-# Update npm and install yarn.
-RUN sudo npm install -g npm --prefix=/usr/local
-RUN sudo npm install -g yarn
+# Install node, npm, and yarn.
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update
+RUN apt-get install nodejs yarn -y
 
 # Install postgres.
-RUN apk --no-cache add "postgresql<9.6" "postgresql-contrib<9.6" postgresql-dev
+# The debian source is required since 9.5 is not provided by default on debian jesse.
+# It can be removed when we upgrade to 9.6+.
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+RUN apt-get update
+RUN apt-get install postgresql-9.5 -y
 
 # Install redis.
-RUN apk --no-cache add redis
+RUN apt-get install redis-server -y
 
 # Install memcached.
-RUN apk --no-cache add memcached
+RUN apt-get install memcached -y
 
-# Install other circle and build requirements.
-RUN apk --no-cache add alpine-sdk linux-headers git openssh tar gzip ca-certificates qt5-qtwebkit-dev imagemagick
-ENV QMAKE /usr/lib/qt5/bin/qmake
+# Ensure other circle/build requirements are installed and up to date.
+RUN apt-get install git openssh-server tar gzip ca-certificates imagemagick -y
+
+# Install chrome/driver dependencies.
+RUN apt-get install unzip xvfb libxi6 libgconf-2-4 libasound2 libatk1.0-0 libgtk-3-0 libnspr4 libxcomposite1 libxcursor1 libxrandr2 libxss1 libxtst6 fonts-liberation libappindicator1 libnss3 xdg-utils -y
+
+# Install chrome.
+RUN wget --quiet -N https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -P ~/
+RUN dpkg -i ~/google-chrome-stable_current_amd64.deb
+
+# Install chromedriver.
+RUN wget --quiet -N http://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip -P ~/
+RUN unzip ~/chromedriver_linux64.zip -d ~/
+RUN rm ~/chromedriver_linux64.zip
+RUN mv -f ~/chromedriver /usr/local/bin/chromedriver
+RUN chown root:root /usr/local/bin/chromedriver
+RUN chmod 0755 /usr/local/bin/chromedriver
+
+# Clean up and free up space.
+RUN apt-get clean
+RUN apt-get autoremove --purge
 
 # Create circle user.
-RUN adduser -S circleci
+RUN adduser circleci --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password
+RUN usermod -aG sudo circleci
 
 # Setup postgres.
-RUN mkdir -p /usr/local/pgsql
-RUN chown -Rf circleci /usr/local/pgsql
+RUN mkdir -p /usr/local/pgsql/data
+RUN mkdir -p /usr/local/pgsql/log
+RUN chown -Rf circleci /usr/local/pgsql/data
+RUN chown -Rf circleci /usr/local/pgsql/log
+RUN chown -Rf circleci /var/run/postgresql
+RUN sudo -u circleci /usr/lib/postgresql/9.5/bin/initdb -D /usr/local/pgsql/data
 
 # Install bundler.
 ENV BUNDLER_VERSION 1.15.1
