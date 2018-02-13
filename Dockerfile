@@ -14,8 +14,15 @@ WORKDIR /
 ADD chromedriver.sha256 /chromedriver.sha256
 
 # Install basic utilities for package installation and setup.
-RUN apt-get update && apt-get upgrade
+RUN apt-get update && apt-get upgrade -y
 RUN apt-get install sudo apt-transport-https -y
+
+# Set locale
+RUN apt-get install locales
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+RUN echo 'LANG="en_US.UTF-8"' > /etc/default/locale
+RUN dpkg-reconfigure --frontend=noninteractive locales
+RUN update-locale en_US.UTF-8
 
 # Install node, npm, and yarn.
 ENV NODEREPO node_6.x
@@ -97,6 +104,7 @@ ENV AHA_REDIS_URL redis://localhost:6379/0
 ENV JEST_SUITE_NAME Aha! Tests
 ENV JEST_JUNIT_OUTPUT "/tmp/jest/junit.xml"
 ENV RAILS_ENV test
+ENV LC_ALL "en_US.UTF-8"
 
 # Add start script.
 ADD start.sh /root/start.sh
