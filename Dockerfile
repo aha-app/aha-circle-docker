@@ -93,12 +93,6 @@ RUN chown -Rf circleci /usr/local/pgsql/log
 RUN chown -Rf circleci /var/run/postgresql
 RUN sudo -u circleci /usr/lib/postgresql/9.5/bin/initdb -D /usr/local/pgsql/data
 
-# Install patched phantomjs.
-RUN gem install specific_install
-RUN gem specific_install https://github.com/aha-app/phantomjs-gem.git
-ADD phantomjs.rb /root/phantomjs.rb
-RUN ruby /root/phantomjs.rb
-
 # Set env.
 ENV AHA_REDIS_URL redis://localhost:6379/0
 ENV JEST_SUITE_NAME Aha! Tests
