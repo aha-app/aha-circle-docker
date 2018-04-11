@@ -103,4 +103,7 @@ ENV LC_ALL "en_US.UTF-8"
 # Add start script.
 ADD start.sh /root/start.sh
 
+# Add npmrc template.
+RUN mkdir -p /usr/etc && echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > /usr/etc/npmrc
+
 CMD /bin/bash
