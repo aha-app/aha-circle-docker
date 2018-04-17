@@ -40,13 +40,14 @@ RUN apt-get update
 RUN apt-get install nodejs yarn -y
 
 # Install postgres.
-# The debian source is required since 9.5 is not provided by default on debian jessie.
+# The debian source is required since 9.3 is not provided by default on debian jessie.
 # It can be removed when we upgrade to 9.6+.
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 ADD postgres.pub /tmp/postgres.pub
 RUN cat /tmp/postgres.pub | apt-key add -
-RUN apt-get update
-RUN apt-get install postgresql-9.5 -y
+# --fix-missing is needed because of a problem with the postgresql apt server for 9.3.
+RUN apt-get update --fix-missing
+RUN apt-get install postgresql-9.3 -y
 
 # Install redis.
 RUN apt-get install redis-server -y
@@ -91,7 +92,7 @@ RUN mkdir -p /usr/local/pgsql/log
 RUN chown -Rf circleci /usr/local/pgsql/data
 RUN chown -Rf circleci /usr/local/pgsql/log
 RUN chown -Rf circleci /var/run/postgresql
-RUN sudo -u circleci /usr/lib/postgresql/9.5/bin/initdb -D /usr/local/pgsql/data
+RUN sudo -u circleci /usr/lib/postgresql/9.3/bin/initdb -D /usr/local/pgsql/data
 
 # Set env.
 ENV AHA_REDIS_URL redis://localhost:6379/0
