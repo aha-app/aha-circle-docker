@@ -56,7 +56,7 @@ RUN apt-get install redis-server -y
 RUN apt-get install memcached -y
 
 # Ensure other circle/build requirements are installed and up to date.
-RUN apt-get install git openssh-server tar gzip ca-certificates imagemagick jq -y
+RUN apt-get install git openssh-server tar gzip ca-certificates imagemagick jq cmake -y
 
 # Install chrome/driver dependencies.
 RUN apt-get install unzip xvfb libxi6 libgconf-2-4 libasound2 libatk1.0-0 libgtk-3-0 libnspr4 libxcomposite1 libxcursor1 libxrandr2 libxss1 libxtst6 fonts-liberation libappindicator1 libnss3 xdg-utils -y
