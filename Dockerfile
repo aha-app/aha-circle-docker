@@ -66,7 +66,7 @@ ADD chrome.pub /tmp/chrome.pub
 RUN cat /tmp/chrome.pub | apt-key add -
 RUN echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
 RUN apt-get update
-RUN apt-get install google-chrome-stable
+RUN apt-get install google-chrome-stable -y
 
 # Install chromedriver.
 RUN curl -sSO https://chromedriver.storage.googleapis.com/2.33/chromedriver_linux64.zip
