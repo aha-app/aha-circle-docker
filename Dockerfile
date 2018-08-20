@@ -45,6 +45,7 @@ RUN apt-get install nodejs yarn -y
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 ADD postgres.pub /tmp/postgres.pub
 RUN cat /tmp/postgres.pub | apt-key add -
+RUN echo "deb http://security.debian.org/debian-security jessie/updates main " > /etc/apt/sources.list.d/debian-security.list
 # --fix-missing is needed because of a problem with the postgresql apt server for 9.3.
 RUN apt-get update --fix-missing
 RUN apt-get install postgresql-9.3 -y
