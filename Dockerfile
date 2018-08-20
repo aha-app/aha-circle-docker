@@ -18,7 +18,7 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install sudo apt-transport-https -y
 
 # Set locale
-RUN apt-get install locales
+RUN apt-get install locales -y
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 RUN echo 'LANG="en_US.UTF-8"' > /etc/default/locale
 RUN dpkg-reconfigure --frontend=noninteractive locales
