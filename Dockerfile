@@ -10,7 +10,7 @@ WORKDIR /
 
 # Add SHA256 sum for ChromeDriver binary.
 # Calculate with: curl -s DOWNLOAD_URL | shasum -a 256
-# ChromeDriver v2.39 https://chromedriver.storage.googleapis.com/2.39/chromedriver_linux64.zip
+# ChromeDriver v2.41 https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip
 ADD chromedriver.sha256 /chromedriver.sha256
 
 # Install basic utilities for package installation and setup.
@@ -70,7 +70,7 @@ RUN apt-get update
 RUN apt-get install google-chrome-stable -y
 
 # Install chromedriver.
-RUN curl -sSO https://chromedriver.storage.googleapis.com/2.39/chromedriver_linux64.zip
+RUN curl -sSO https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip
 RUN sha256sum -c /chromedriver.sha256
 RUN unzip chromedriver_linux64.zip
 RUN rm chromedriver_linux64.zip
