@@ -60,7 +60,7 @@ RUN apt-get install memcached -y
 RUN apt-get install git openssh-server tar gzip ca-certificates imagemagick jq cmake -y
 
 # Install chrome/driver dependencies.
-RUN apt-get install unzip xvfb libxi6 libgconf-2-4 libasound2 libatk1.0-0 libgtk-3-0 libnspr4 libxcomposite1 libxcursor1 libxrandr2 libxss1 libxtst6 fonts-liberation libappindicator1 libnss3 xdg-utils -y
+RUN apt-get install unzip libxi6 libgconf-2-4 libasound2 libatk1.0-0 libgtk-3-0 libnspr4 libxcomposite1 libxcursor1 libxrandr2 libxss1 libxtst6 fonts-liberation libappindicator1 libnss3 xdg-utils lsof -y
 
 # Install chrome.
 ADD chrome.pub /tmp/chrome.pub
