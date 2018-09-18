@@ -10,7 +10,7 @@ WORKDIR /
 
 # Add SHA256 sum for ChromeDriver binary.
 # Calculate with: curl -s DOWNLOAD_URL | shasum -a 256
-# ChromeDriver  v2.33.506092  https://chromedriver.storage.googleapis.com/2.33/chromedriver_linux64.zip
+# ChromeDriver v2.41 https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip
 ADD chromedriver.sha256 /chromedriver.sha256
 
 # Install basic utilities for package installation and setup.
@@ -18,7 +18,7 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install sudo apt-transport-https -y
 
 # Set locale
-RUN apt-get install locales
+RUN apt-get install locales -y
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
 RUN echo 'LANG="en_US.UTF-8"' > /etc/default/locale
 RUN dpkg-reconfigure --frontend=noninteractive locales
@@ -45,6 +45,7 @@ RUN apt-get install nodejs yarn -y
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 ADD postgres.pub /tmp/postgres.pub
 RUN cat /tmp/postgres.pub | apt-key add -
+RUN echo "deb http://security.debian.org/debian-security jessie/updates main " > /etc/apt/sources.list.d/debian-security.list
 # --fix-missing is needed because of a problem with the postgresql apt server for 9.3.
 RUN apt-get update --fix-missing
 RUN apt-get install postgresql-9.3 -y
@@ -59,7 +60,7 @@ RUN apt-get install memcached -y
 RUN apt-get install git openssh-server tar gzip ca-certificates imagemagick jq cmake -y
 
 # Install chrome/driver dependencies.
-RUN apt-get install unzip xvfb libxi6 libgconf-2-4 libasound2 libatk1.0-0 libgtk-3-0 libnspr4 libxcomposite1 libxcursor1 libxrandr2 libxss1 libxtst6 fonts-liberation libappindicator1 libnss3 xdg-utils -y
+RUN apt-get install unzip libxi6 libgconf-2-4 libasound2 libatk1.0-0 libgtk-3-0 libnspr4 libxcomposite1 libxcursor1 libxrandr2 libxss1 libxtst6 fonts-liberation libappindicator1 libnss3 xdg-utils lsof -y
 
 # Install chrome.
 ADD chrome.pub /tmp/chrome.pub
@@ -69,7 +70,7 @@ RUN apt-get update
 RUN apt-get install google-chrome-stable -y
 
 # Install chromedriver.
-RUN curl -sSO https://chromedriver.storage.googleapis.com/2.33/chromedriver_linux64.zip
+RUN curl -sSO https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip
 RUN sha256sum -c /chromedriver.sha256
 RUN unzip chromedriver_linux64.zip
 RUN rm chromedriver_linux64.zip
