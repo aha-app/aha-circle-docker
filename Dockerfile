@@ -25,7 +25,7 @@ RUN dpkg-reconfigure --frontend=noninteractive locales
 RUN update-locale en_US.UTF-8
 
 # Install node, npm, and yarn.
-ENV NODEREPO node_6.x
+ENV NODEREPO node_8.x
 ENV DISTRO jessie
 
 RUN echo "deb https://deb.nodesource.com/${NODEREPO} ${DISTRO} main" > /etc/apt/sources.list.d/nodesource.list
@@ -38,6 +38,7 @@ RUN cat /tmp/yarn.pub | apt-key add -
 
 RUN apt-get update
 RUN apt-get install nodejs yarn -y
+RUN npm config set always-auth true
 
 # Install postgres.
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/apt/sources.list.d/pgdg.list
