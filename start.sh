@@ -21,3 +21,6 @@ redis-server --daemonize yes
 
 # Start memcached.
 sudo -u circleci memcached -d
+
+# Start elasticsearch
+service elasticsearch start
