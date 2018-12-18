@@ -48,6 +48,16 @@ RUN echo "deb http://security.debian.org/debian-security jessie/updates main " >
 RUN apt-get update
 RUN apt-get install postgresql-10 -y
 
+# Install elasticsearch
+ADD elasticsearch.pub /tmp/elasticsearch.pub
+RUN apt-get update
+RUN apt-get install openjdk-8-jre -y
+RUN apt-get install apt-transport-https -y
+RUN cat /tmp/elasticsearch.pub | apt-key add -
+RUN echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
+RUN apt-get update
+RUN apt-get install elasticsearch=6.5.3 -y
+
 # Install redis.
 RUN apt-get install redis-server -y
 
