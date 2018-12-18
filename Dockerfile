@@ -3,10 +3,10 @@ FROM ruby:2.3
 WORKDIR /
 
 # Public key download locations
-# chrome.pub    https://dl-ssl.google.com/linux/linux_signing_key.pub
-# node.pub      https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-# postgres.pub  https://www.postgresql.org/media/keys/ACCC4CF8.asc
-# yarn.pub      https://dl.yarnpkg.com/debian/pubkey.gpg
+# chrome.pub             https://dl-ssl.google.com/linux/linux_signing_key.pub
+# node.pub               https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+# postgres.pub           https://www.postgresql.org/media/keys/ACCC4CF8.asc
+# yarn.pub               https://dl.yarnpkg.com/debian/pubkey.gpg
 # elasticsearch.pub      https://artifacts.elastic.co/GPG-KEY-elasticsearch
 
 # Add SHA256 sum for ChromeDriver binary.
@@ -51,9 +51,7 @@ RUN apt-get install postgresql-10 -y
 
 # Install elasticsearch
 ADD elasticsearch.pub /tmp/elasticsearch.pub
-RUN apt-get update
 RUN apt-get install openjdk-8-jre -y
-RUN apt-get install apt-transport-https -y
 RUN cat /tmp/elasticsearch.pub | apt-key add -
 RUN echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
 RUN apt-get update
