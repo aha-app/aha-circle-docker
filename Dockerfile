@@ -7,6 +7,7 @@ WORKDIR /
 # node.pub      https://deb.nodesource.com/gpgkey/nodesource.gpg.key
 # postgres.pub  https://www.postgresql.org/media/keys/ACCC4CF8.asc
 # yarn.pub      https://dl.yarnpkg.com/debian/pubkey.gpg
+# elasticsearch.pub      https://artifacts.elastic.co/GPG-KEY-elasticsearch
 
 # Add SHA256 sum for ChromeDriver binary.
 # Calculate with: curl -s DOWNLOAD_URL | shasum -a 256
