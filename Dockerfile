@@ -111,6 +111,7 @@ ENV LC_ALL "en_US.UTF-8"
 
 # Add start script.
 ADD start.sh /root/start.sh
+ADD start_elasticsearch.sh /root/start_elasticsearch.sh
 
 # Add npmrc template.
 RUN mkdir -p /usr/etc && echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > /usr/etc/npmrc
