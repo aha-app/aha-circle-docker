@@ -1,4 +1,8 @@
 #!/bin/bash
+# Start elasticsearch, sleep to give time for ES to bootup (there is something asynchronous about the bootup of ES via service)
+service elasticsearch start
+sleep 10
+
 # Start postgres.
 sudo -u circleci /usr/lib/postgresql/10/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/log/logfile start
 sleep 1 # wait for pg to start up
@@ -21,6 +25,3 @@ redis-server --daemonize yes
 
 # Start memcached.
 sudo -u circleci memcached -d
-
-# Start elasticsearch
-service elasticsearch start
