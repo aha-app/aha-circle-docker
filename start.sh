@@ -1,5 +1,6 @@
 #!/bin/bash
 # Start elasticsearch, sleep to give time for ES to bootup (there is something asynchronous about the bootup of ES via service)
+update-rc.d elasticsearch defaults 95 10
 service elasticsearch start
 
 for i in 1 2 3 4 5 6 7 8
