@@ -1,7 +1,17 @@
 #!/bin/bash
 # Start elasticsearch, sleep to give time for ES to bootup (there is something asynchronous about the bootup of ES via service)
 service elasticsearch start
-sleep 10
+
+for i in 1 2 3 4 5 6 7 8
+do
+  echo "Connecting to ES, try $i"
+  if [ $(curl -s -w "%{http_code}" "http://localhost:9200/?pretty" -o /dev/null) = "200" ]
+  then
+    echo "ES OK" && break
+  else
+    echo "ES unable to connect" && sleep 10;
+  fi
+done
 
 # Start postgres.
 sudo -u circleci /usr/lib/postgresql/10/bin/pg_ctl -D /usr/local/pgsql/data -l /usr/local/pgsql/log/logfile start
