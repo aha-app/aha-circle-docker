@@ -77,7 +77,7 @@ RUN apt-get update
 RUN apt-get install google-chrome-stable -y
 
 # Install chromedriver.
-RUN curl -sSO https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip
+RUN curl -sSO https://chromedriver.storage.googleapis.com/74.0.3729.6/chromedriver_linux64.zip
 RUN sha256sum -c /chromedriver.sha256
 RUN unzip chromedriver_linux64.zip
 RUN rm chromedriver_linux64.zip
