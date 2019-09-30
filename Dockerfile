@@ -27,7 +27,7 @@ RUN update-locale en_US.UTF-8
 
 # Install node, npm, and yarn.
 ENV NODEREPO node_8.x
-ENV DISTRO jessie
+ENV DISTRO buster
 
 RUN echo "deb https://deb.nodesource.com/${NODEREPO} ${DISTRO} main" > /etc/apt/sources.list.d/nodesource.list
 ADD node.pub /tmp/node.pub
@@ -37,24 +37,31 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.lis
 ADD yarn.pub /tmp/yarn.pub
 RUN cat /tmp/yarn.pub | apt-key add -
 
-RUN apt-get update
-RUN apt-get install nodejs yarn -y
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+ADD postgres.pub /tmp/postgres.pub
+RUN cat /tmp/postgres.pub | apt-key add -
+RUN echo "deb http://security.debian.org/debian-security buster/updates main " > /etc/apt/sources.list.d/debian-security.list
+
+ADD elasticsearch.pub /tmp/elasticsearch.pub
+RUN cat /tmp/elasticsearch.pub | apt-key add -
+RUN echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
+
+ADD chrome.pub /tmp/chrome.pub
+RUN cat /tmp/chrome.pub | apt-key add -
+RUN echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
+
+# Update keys
+RUN apt-key adv --refresh-keys --keyserver ha.pool.sks-keyservers.net
+
+# Install nodejs
+RUN apt-get install nodejs npm yarn -y
 RUN npm config set always-auth true
 
 # Install postgres.
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-ADD postgres.pub /tmp/postgres.pub
-RUN cat /tmp/postgres.pub | apt-key add -
-RUN echo "deb http://security.debian.org/debian-security jessie/updates main " > /etc/apt/sources.list.d/debian-security.list
-RUN apt-get update
 RUN apt-get install postgresql-10 -y
 
 # Install elasticsearch
-ADD elasticsearch.pub /tmp/elasticsearch.pub
 RUN apt-get install openjdk-8-jre -y
-RUN cat /tmp/elasticsearch.pub | apt-key add -
-RUN echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
-RUN apt-get update
 RUN apt-get install elasticsearch=6.5.3 -y
 
 # Install redis.
@@ -70,10 +77,6 @@ RUN apt-get install git openssh-server libssl1.0-dev tar gzip ca-certificates im
 RUN apt-get install unzip libxi6 libgconf-2-4 libasound2 libatk1.0-0 libgtk-3-0 libnspr4 libxcomposite1 libxcursor1 libxrandr2 libxss1 libxtst6 fonts-liberation libappindicator1 libnss3 xdg-utils lsof -y
 
 # Install chrome.
-ADD chrome.pub /tmp/chrome.pub
-RUN cat /tmp/chrome.pub | apt-key add -
-RUN echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
-RUN apt-get update
 RUN apt-get install google-chrome-stable -y
 
 # Install chromedriver.
