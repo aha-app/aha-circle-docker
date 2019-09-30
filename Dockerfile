@@ -52,6 +52,7 @@ RUN echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/so
 
 # Update keys
 RUN apt-key adv --refresh-keys --keyserver ha.pool.sks-keyservers.net
+RUN apt-get update
 
 # Install nodejs
 RUN apt-get install nodejs npm yarn -y
