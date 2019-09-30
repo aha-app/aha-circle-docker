@@ -62,7 +62,7 @@ RUN npm config set always-auth true
 RUN apt-get install postgresql-10 -y
 
 # Install elasticsearch
-RUN apt-get install openjdk-8-jre -y
+RUN apt-get install openjdk-11-jre -y
 RUN apt-get install elasticsearch=6.5.3 -y
 
 # Install redis.
