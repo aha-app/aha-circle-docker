@@ -60,6 +60,15 @@ RUN npm config set always-auth true
 
 # Install postgres.
 RUN apt-get install postgresql-10 -y
+RUN apt-get install libncurses5 libc++-dev libc++abi-dev postgresql-server-dev-10 -y \
+  && curl -LsSO https://github.com/plv8/plv8/archive/v2.3.8.tar.gz \
+  && tar -xvzf v2.3.8.tar.gz \
+  && cd plv8-2.3.8 \
+  && make \
+  && make install \
+  && cd .. \
+  && rm -rf plv8-2.3.8 && rm v2.3.8.tar.gz \
+  && apt-get remove postgresql-server-dev-10 libc++-dev libc++abi-dev -y
 
 # Install elasticsearch
 RUN apt-get install openjdk-11-jre -y
@@ -91,7 +100,7 @@ RUN chmod 0755 /usr/local/bin/chromedriver
 
 # Clean up and free up space.
 RUN apt-get clean
-RUN apt-get autoremove --purge
+RUN apt-get autoremove --purge -y
 RUN rm /chromedriver.sha256 /tmp/chrome.pub /tmp/node.pub /tmp/postgres.pub /tmp/yarn.pub
 
 # Create circle user.
