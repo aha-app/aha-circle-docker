@@ -67,8 +67,7 @@ RUN apt-get install libncurses5 libc++-dev libc++abi-dev postgresql-server-dev-1
   && make \
   && make install \
   && cd .. \
-  && rm -rf plv8-2.3.8 && rm v2.3.8.tar.gz \
-  && apt-get remove postgresql-server-dev-10 libc++-dev libc++abi-dev -y
+  && rm -rf plv8-2.3.8 && rm v2.3.8.tar.gz
 
 # Install elasticsearch
 RUN apt-get install openjdk-11-jre -y
@@ -99,8 +98,8 @@ RUN chown root:root /usr/local/bin/chromedriver
 RUN chmod 0755 /usr/local/bin/chromedriver
 
 # Clean up and free up space.
-RUN apt-get clean
-RUN apt-get autoremove --purge -y
+# RUN apt-get clean
+# RUN apt-get autoremove --purge -y
 RUN rm /chromedriver.sha256 /tmp/chrome.pub /tmp/node.pub /tmp/postgres.pub /tmp/yarn.pub
 
 # Create circle user.
