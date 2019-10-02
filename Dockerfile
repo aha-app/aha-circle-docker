@@ -60,14 +60,20 @@ RUN npm config set always-auth true
 
 # Install postgres.
 RUN apt-get install postgresql-10 -y
-RUN apt-get install libncurses5 libc++-dev libc++abi-dev postgresql-server-dev-10 -y \
-  && curl -LsSO https://github.com/plv8/plv8/archive/v2.3.8.tar.gz \
-  && tar -xvzf v2.3.8.tar.gz \
-  && cd plv8-2.3.8 \
-  && make \
+
+ENV PLV8_VERSION=v2.1.0 \
+    PLV8_SHASUM="207d712e919ab666936f42b29ff3eae413736b70745f5bfeb2d0910f0c017a5c  v2.1.0.tar.gz"
+
+RUN mkdir -p /tmp/build && cd /tmp/build \
+  && apt-get install libncurses5 libc++-dev libc++abi-dev postgresql-server-dev-10 -y \
+  && curl -LsSO https://github.com/plv8/plv8/archive/${PLV8_VERSION}.tar.gz \
+  && tar -xvzf ${PLV8_VERSION}.tar.gz \
+  && cd plv8-${PLV8_VERSION#?} \
+  && make static \
   && make install \
-  && cd .. \
-  && rm -rf plv8-2.3.8 && rm v2.3.8.tar.gz
+  && strip /usr/lib/postgresql/10/lib/plv8.so \
+  && cd \
+  && rm -rf /tmp/build
 
 # Install elasticsearch
 RUN apt-get install openjdk-11-jre -y
