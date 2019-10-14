@@ -47,7 +47,7 @@ ADD postgres.pub /tmp/postgres.pub
 RUN cat /tmp/postgres.pub | apt-key add -
 RUN echo "deb http://security.debian.org/debian-security jessie/updates main " > /etc/apt/sources.list.d/debian-security.list
 RUN apt-get update
-RUN apt-get install postgresql-10 -y
+RUN apt-get install postgresql-10-plv8 -y
 
 # Install elasticsearch
 ADD elasticsearch.pub /tmp/elasticsearch.pub
