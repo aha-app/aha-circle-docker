@@ -47,7 +47,7 @@ ADD postgres.pub /tmp/postgres.pub
 RUN cat /tmp/postgres.pub | apt-key add -
 RUN echo "deb http://security.debian.org/debian-security jessie/updates main " > /etc/apt/sources.list.d/debian-security.list
 RUN apt-get update
-RUN apt-get install postgresql-10 -y
+RUN apt-get install postgresql-10-plv8 -y
 
 # Install elasticsearch
 ADD elasticsearch.pub /tmp/elasticsearch.pub
@@ -68,6 +68,13 @@ RUN apt-get install git openssh-server libssl1.0-dev tar gzip ca-certificates im
 
 # Install chrome/driver dependencies.
 RUN apt-get install unzip libxi6 libgconf-2-4 libasound2 libatk1.0-0 libgtk-3-0 libnspr4 libxcomposite1 libxcursor1 libxrandr2 libxss1 libxtst6 fonts-liberation libappindicator1 libnss3 xdg-utils lsof -y
+
+# Install Google Noto Color Emoji font for emoji support in PDFs
+RUN mkdir -p /usr/share/fonts/truetype/noto && \
+    curl -sSO https://noto-website-2.storage.googleapis.com/pkgs/NotoColorEmoji-unhinted.zip && \
+    unzip -p NotoColorEmoji-unhinted.zip NotoColorEmoji.ttf > /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf && \
+    rm -rf NotoColorEmoji* && \
+    fc-cache -f -v
 
 # Install chrome.
 ADD chrome.pub /tmp/chrome.pub
