@@ -26,7 +26,7 @@ RUN dpkg-reconfigure --frontend=noninteractive locales
 RUN update-locale en_US.UTF-8
 
 # Install node, npm, and yarn.
-ENV NODEREPO node_8.x
+ENV NODEREPO node_12.x
 ENV DISTRO buster
 
 RUN echo "deb https://deb.nodesource.com/${NODEREPO} ${DISTRO} main" > /etc/apt/sources.list.d/nodesource.list
@@ -55,7 +55,7 @@ RUN apt-key adv --refresh-keys --keyserver ha.pool.sks-keyservers.net
 RUN apt-get update
 
 # Install nodejs
-RUN apt-get install nodejs npm yarn -y
+RUN apt-get install nodejs yarn -y
 RUN npm config set always-auth true
 
 # Install postgres.
@@ -134,11 +134,11 @@ ENV JEST_JUNIT_OUTPUT "/tmp/jest/junit.xml"
 ENV RAILS_ENV test
 ENV LC_ALL "en_US.UTF-8"
 
+# Add npmrc template.
+RUN mkdir -p /usr/etc && echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > /usr/etc/npmrc
+
 # Add start script.
 ADD start.sh /root/start.sh
 ADD start_elasticsearch.sh /root/start_elasticsearch.sh
-
-# Add npmrc template.
-RUN mkdir -p /usr/etc && echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > /usr/etc/npmrc
 
 CMD /bin/bash
