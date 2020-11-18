@@ -7,7 +7,6 @@ WORKDIR /
 # node.pub               https://deb.nodesource.com/gpgkey/nodesource.gpg.key
 # postgres.pub           https://www.postgresql.org/media/keys/ACCC4CF8.asc
 # yarn.pub               https://dl.yarnpkg.com/debian/pubkey.gpg
-# elasticsearch.pub      https://artifacts.elastic.co/GPG-KEY-elasticsearch
 
 # Add SHA256 sum for ChromeDriver binary.
 # Calculate with: curl -s DOWNLOAD_URL | shasum -a 256
@@ -42,10 +41,6 @@ ADD postgres.pub /tmp/postgres.pub
 RUN cat /tmp/postgres.pub | apt-key add -
 RUN echo "deb http://security.debian.org/debian-security buster/updates main " > /etc/apt/sources.list.d/debian-security.list
 
-ADD elasticsearch.pub /tmp/elasticsearch.pub
-RUN cat /tmp/elasticsearch.pub | apt-key add -
-RUN echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | tee /etc/apt/sources.list.d/elastic-6.x.list
-
 ADD chrome.pub /tmp/chrome.pub
 RUN cat /tmp/chrome.pub | apt-key add -
 RUN echo "deb https://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list
@@ -74,10 +69,6 @@ RUN mkdir -p /tmp/build && cd /tmp/build \
   && strip /usr/lib/postgresql/10/lib/plv8.so \
   && cd \
   && rm -rf /tmp/build
-
-# Install elasticsearch
-RUN apt-get install openjdk-11-jre -y
-RUN apt-get install elasticsearch=6.5.3 -y
 
 # Install redis.
 RUN apt-get install redis-server -y
@@ -142,6 +133,5 @@ RUN mkdir -p /usr/etc && echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > 
 
 # Add start script.
 ADD start.sh /root/start.sh
-ADD start_elasticsearch.sh /root/start_elasticsearch.sh
 
 CMD /bin/bash
