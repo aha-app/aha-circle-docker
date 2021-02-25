@@ -1,4 +1,4 @@
-FROM ruby:2.6.6-buster
+FROM ruby:2.7.2-buster
 
 WORKDIR /
 
